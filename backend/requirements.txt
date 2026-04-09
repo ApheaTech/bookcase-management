@@ -1,0 +1,7 @@
+flask==2.3.3
+requests==2.31.0
+python-dotenv==1.0.0
+tos==2.9.0
+langchain-openai==0.3.35
+langchain-core==0.3.79
+httpx==0.28.1

@@ -1,71 +1,89 @@
-# Bookcase Backend
+# bookcase-management
 
-A FastAPI-based backend service that provides book information based on ISBN numbers.
+`bookcase-management` is a full-stack project with a Flask backend and a React frontend.
 
-## Features
+## Structure
 
-- **Caching**: Stores book information in a database to avoid repeated API calls
-- **External API Integration**: Fetches book data from Open Library API
-- **RESTful API**: Simple and intuitive API interface
+- `backend/`: Flask API, SQLite data, reading analysis queue, LLM integration, backend scripts
+- `frontend/`: React admin console for model usage and book data management
 
-## Installation
+## Backend
 
-1. Install dependencies:
+Setup:
+
 ```bash
-pip install -r requirements.txt
-```
-
-2. Copy environment variables:
-```bash
+cd backend
 cp .env.example .env
+pip install -r requirements.txt
+python app.py
 ```
 
-3. Run the server:
+Backend default address:
+
 ```bash
-uvicorn main:app --reload
+http://127.0.0.1:8001
 ```
 
-## API Usage
+Important backend env:
 
-### Get Book by ISBN
+- `LLM_PROVIDER`
+- `LLM_BASE_URL`
+- `LLM_API_KEY`
+- `LLM_MODEL`
+- `LLM_TIMEOUT`
+- `LLM_CONNECT_TIMEOUT`
+- `LLM_MAX_RETRIES`
+- `ANALYSIS_WORKER_CONCURRENCY`
+- `CORS_ALLOW_ORIGINS`
 
-**Endpoint**: `GET /book/{isbn}`
+## Frontend
 
-**Example**:
+Setup:
+
 ```bash
-curl http://localhost:8000/book/9780134685991
+cd frontend
+cp .env.example .env
+npm install
+npm run build
 ```
 
-**Response**:
-```json
-{
-  "isbn": "9780134685991",
-  "title": "Effective Python: 90 Specific Ways to Write Better Python",
-  "authors": "Brett Slatkin",
-  "publisher": "Addison-Wesley Professional",
-  "publish_date": "2019-05-14",
-  "pages": 448,
-  "language": "eng",
-  "cover_url": "https://covers.openlibrary.org/b/id/123456-M.jpg",
-  "description": "...",
-  "id": 1,
-  "created_at": "2023-12-01T12:00:00Z",
-  "updated_at": null
-}
+Frontend env:
+
+- `VITE_API_BASE_URL`: backend API base URL, default `http://127.0.0.1:8001`
+
+After build, open:
+
+```bash
+http://127.0.0.1:8001/admin
 ```
 
-## Technology Stack
+## Current Features
 
-- **FastAPI**: Modern, fast (high-performance) web framework for building APIs
-- **SQLAlchemy**: SQL toolkit and Object-Relational Mapping (ORM)
-- **SQLite**: Lightweight database for storing book information
-- **Requests**: HTTP library for making external API calls
+- ISBN-based book lookup with SQLite cache
+- Reading preference analysis task queue
+- Same-book-list hash cache for analysis results
+- Model usage statistics by provider, by model, and global totals
+- Admin book list with search and pagination
 
-## Environment Variables
+## Reading Preference Task APIs
 
-- `DATABASE_URL`: Database connection URL (default: `sqlite:///./bookcase.db`)
-- `EXTERNAL_API_URL`: External API URL for fetching book data (default: `https://openlibrary.org/api/books`)
+Create task:
 
-## License
+```bash
+curl -X POST http://127.0.0.1:8001/agent/reading-preferences/tasks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "book_titles": ["八次危机", "史蒂夫·乔布斯", "全球通史", "机器学习", "刑法学讲义", "大设计"]
+  }'
+```
 
-MIT
+Poll task:
+
+```bash
+curl http://127.0.0.1:8001/agent/reading-preferences/tasks/<task_id>
+```
+
+## Admin APIs
+
+- `GET /admin/api/usage`
+- `GET /admin/api/books`
