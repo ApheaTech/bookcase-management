@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    image: bookcase-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bookcase-backend
+    ports:
+      - "8001:8001"
+    volumes:
+      # 挂载数据库文件到宿主机
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=sqlite:///./data/bookcase.db
+      - FLASK_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # 如果需要连接宿主机上的本地 LLM 服务
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

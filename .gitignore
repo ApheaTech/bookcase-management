@@ -79,3 +79,5 @@ local_settings.py
 
 # Generated Python artifacts accidentally tracked before cleanup
 __pycache__/
+
+*.tar

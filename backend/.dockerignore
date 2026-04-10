@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# 数据库
+*.db
+*.db-wal
+*.db-shm
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# 测试
+test_*.py
+tests/
+.pytest_cache/
+
+# 环境配置（需要挂载或构建时传入）
+.env
+.env.local
+.env.*.local
+
+# 前端
+frontend/
+
+# 其他
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
