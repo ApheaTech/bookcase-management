@@ -1,0 +1,17 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+
+# 开发工具
+.vscode/
+.idea/
+
+# 环境变量
+.env
+.env.local
+
+# 其他
+*.log
+.DS_Store
